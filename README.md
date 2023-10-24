@@ -1,4 +1,4 @@
-# front_is
+# Frontend
 
 A new Flutter project.
 
