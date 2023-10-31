@@ -11,10 +11,10 @@ dependencies:
   flutter:
     sdk: flutter
   url_launcher: ^6.0.3
-  google_fonts: ^3.0.1
 
 
   cupertino_icons: ^1.0.2
+  google_fonts: ^6.1.0
 
 dev_dependencies:
   flutter_test:
@@ -53,11 +53,3 @@ flutter:
     - assets/images/ingredientes/img_21.png
     - assets/images/ingredientes/img_22.png
     - assets/images/ingredientes/img_23.png
-    - assets/fonts/
-
-
-
-fonts:
-  - family: Montserrat
-    fonts:
-      - asset: assets/fonts/Montserrat-Regular.ttf

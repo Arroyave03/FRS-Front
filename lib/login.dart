@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:front_is/menu.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Login extends StatelessWidget {
@@ -9,9 +10,10 @@ class Login extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           "FOOD RECOMMENDATION SYSTEM",
-          style: TextStyle(fontFamily: 'Montserrat'),
+          style: GoogleFonts.montserrat(
+              color: Colors.white, fontWeight: FontWeight.w600),
         ),
         backgroundColor: Color.fromARGB(255, 171, 32, 32),
         actions: <Widget>[
@@ -96,10 +98,10 @@ class Login extends StatelessWidget {
                     ),
                     minimumSize: Size(200, 50),
                   ),
-                  child: const Text("Login",
-                      style: TextStyle(
+                  child: Text("Login",
+                      style: GoogleFonts.montserrat(
+                        fontWeight: FontWeight.w500,
                         color: Colors.black,
-                        fontFamily: 'Montserrat',
                       )),
                 ),
               ],

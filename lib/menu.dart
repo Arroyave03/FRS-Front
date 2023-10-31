@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:front_is/load.dart';
 import 'package:front_is/usuario.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Menu extends StatefulWidget {
@@ -17,8 +18,9 @@ class _MenuState extends State<Menu> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("FOOD RECOMMENDATION SYSTEM",
-            style: TextStyle(fontFamily: 'Montserrat')),
+        title: Text("FOOD RECOMMENDATION SYSTEM",
+            style: GoogleFonts.montserrat(
+                color: Colors.white, fontWeight: FontWeight.w600)),
         backgroundColor: Color.fromARGB(255, 171, 32, 32),
         actions: <Widget>[
           Padding(
@@ -37,11 +39,10 @@ class _MenuState extends State<Menu> {
                   borderRadius: BorderRadius.circular(20.0),
                 ),
               ),
-              child: const Text("Hola, Usuario",
-                  style: TextStyle(
+              child: Text("Hola, Usuario",
+                  style: GoogleFonts.montserrat(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
-                    fontFamily: 'Montserrat',
                   )),
             ),
           ),
@@ -72,15 +73,14 @@ class _MenuState extends State<Menu> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
-                padding: EdgeInsets.only(
+              Padding(
+                padding: const EdgeInsets.only(
                     top: 25.0, left: 20.0, right: 20.0, bottom: 15.0),
                 child: Text(
                   "Selecciona tus ingredientes",
-                  style: TextStyle(
+                  style: GoogleFonts.montserrat(
                     fontSize: 18,
                     color: Colors.white,
-                    fontFamily: 'Montserrat',
                   ),
                 ),
               ),

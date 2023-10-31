@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Usuario extends StatelessWidget {
@@ -8,9 +9,10 @@ class Usuario extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           "FOOD RECOMMENDATION SYSTEM",
-          style: TextStyle(fontFamily: 'Montserrat'),
+          style: GoogleFonts.montserrat(
+              color: Colors.white, fontWeight: FontWeight.w600),
         ),
         backgroundColor: Color.fromARGB(255, 171, 32, 32),
         actions: <Widget>[
@@ -25,11 +27,10 @@ class Usuario extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20.0),
                 ),
               ),
-              child: const Text("Hola, Usuario",
-                  style: TextStyle(
+              child: Text("Hola, Usuario",
+                  style: GoogleFonts.montserrat(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
-                    fontFamily: 'Montserrat',
                   )),
             ),
           ),
@@ -58,24 +59,22 @@ class Usuario extends StatelessWidget {
                 Image.asset("assets/images/perfil.png",
                     width: 200, height: 200),
                 const SizedBox(height: 55),
-                const Text("USUARIO",
-                    style: TextStyle(
+                Text("USUARIO",
+                    style: GoogleFonts.montserrat(
+                      fontWeight: FontWeight.w600,
                       fontSize: 20,
-                      fontFamily: 'Montserrat',
                       color: Colors.white,
                     )),
                 const SizedBox(height: 15),
-                const Text("Teléfono",
-                    style: TextStyle(
+                Text("Teléfono",
+                    style: GoogleFonts.montserrat(
                       fontSize: 20,
-                      fontFamily: 'Montserrat',
                       color: Colors.white,
                     )),
                 const SizedBox(height: 15),
-                const Text("Email",
-                    style: TextStyle(
+                Text("Email",
+                    style: GoogleFonts.montserrat(
                       fontSize: 20,
-                      fontFamily: 'Montserrat',
                       color: Colors.white,
                     )),
               ],
