@@ -10,7 +10,7 @@ class Login extends StatelessWidget {
 
   Future<void> authRequest(String user, String password, context) async {
     final client = http.Client();
-    final url = Uri.parse('http://127.0.0.1:6970/login');
+    final url = Uri.parse('http://127.0.0.1:6970/login'); //TODO: made a better implementation, not hardcoded
 
     try {
       final response = await client.get(
