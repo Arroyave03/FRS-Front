@@ -1,10 +1,73 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:front_is/menu.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart' as http;
 
 class Login extends StatelessWidget {
-  const Login({Key? key}) : super(key: key);
+
+  Future<void> authRequest(String user, String password, context) async {
+    final client = http.Client();
+    final url = Uri.parse('http://127.0.0.1:6970/login');
+
+    try {
+      final response = await client.get(
+        url,
+        headers: <String, String>{
+          'username': user,
+          'password': password,
+        },
+      );
+      if (response.statusCode == 200) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Menu(user)),
+        );
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('ALERT'),
+              content: const Text("As you can see, you entered a wrong username or password. Please try again. and please don't try to hack me :)"),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK, I understand, I will not try to hack you :)'),
+                ),
+              ],
+            );
+          },
+        );
+      }
+    } catch (e) {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('ERROR, THIS S**T DID NOT WORK AS  EXPECTED :('),
+                    content:Text("Something went wrong. Please try again. and please don't try to hack me :)" + e.toString()),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('OK, I understand, I will not try to hack you :)'),
+                      ),
+                    ],
+                  );
+                },
+              );
+    }
+  }
+
+  Login({Key? key}) : super(key: key);
+  String username = "";
+  String password = "";
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +120,7 @@ class Login extends StatelessWidget {
                 SizedBox(height: 40),
                 Container(
                   width: 400,
-                  child: TextField(
+                  child: TextField( //when this textfield is filled, the user is extracted
                     decoration: InputDecoration(
                       hintText: "Usuario",
                       fillColor: Colors.white,
@@ -65,7 +128,7 @@ class Login extends StatelessWidget {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
-                    ),
+                    ), onChanged: (value) => username = value,
                   ),
                 ),
                 SizedBox(height: 20),
@@ -80,16 +143,22 @@ class Login extends StatelessWidget {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
-                    ),
+                    ), onChanged: (value) => password = value,
                   ),
                 ),
                 SizedBox(height: 40),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
+                    //TODO: call the authRequest function
+                    //extract user from the first textfield 
+                    //extract password from the second textfield
+                    //call the authRequest function
+                    authRequest(username, password, context);
+
+                    /*Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => Menu()),
-                    );
+                    );*/
                   },
                   style: ElevatedButton.styleFrom(
                     primary: Color.fromARGB(255, 247, 47, 47),

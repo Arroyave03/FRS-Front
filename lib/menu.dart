@@ -5,8 +5,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Menu extends StatefulWidget {
-  const Menu({Key? key}) : super(key: key);
 
+  String username = ""; 
+  
+  Menu(user, {Key? key}): super(key: key){
+    username = user;
+  }
+  
   @override
   _MenuState createState() => _MenuState();
 }
