@@ -4,14 +4,78 @@ import 'package:front_is/usuario.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'recipe.dart';
+import 'result.dart';
 
 class Menu extends StatefulWidget {
   String username = "";
   String secret = "";
 
-  Menu(String user,String secretAuth, {Key? key}) : super(key: key) {
+  Menu(String user, String secretAuth, {Key? key}) : super(key: key) {
     username = user;
     secret = secretAuth;
+  }
+
+  Future<void> requestUserData(context) async {
+    dynamic client = http.Client();
+    final url = Uri.parse(
+        'http://127.0.0.1:6970/get_recipe_db'); //TODO: made a better implementation, not hardcoded
+
+    try {
+      final response = await client.get(
+        url,
+        headers: <String, String>{'secretAuth': secret, 'user': username},
+      );
+      if (response.statusCode == 200) {
+        //print(response.body);
+        List<dynamic> json = jsonDecode(response.body);
+        List<ResultRecipe> recipes = json.map((itemData) => ResultRecipe.fromJson(itemData)).toList();
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Usuario(username, secret, recipes)),
+        );
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Error'),
+              content: const Text("Something unexpected happened"),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      }
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Error'),
+            content: Text(
+                "Something went wrong. Please try again. SORRY!!! ${e.toString()}"),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK :('),
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 
   Future<void> foodRequest(
@@ -19,16 +83,15 @@ class Menu extends StatefulWidget {
     dynamic client = http.Client();
     final url = Uri.parse(
         'http://127.0.0.1:6970/create_recipe'); //TODO: made a better implementation, not hardcoded
-    String ingredients = "";
 
     if (ingredientListLenght == 0) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text('ALERT >:('),
+            title: const Text('Error'),
             content: const Text(
-                "As you can see, You didn't select any ingredien at all. So we will not make any recommendation. If you want a recommendation, please select at least one ingredient. :)"),
+                "As you can see, You didn't selected any ingredient at all. So we will not make any recommendation. If you want a recommendation, please select at least one ingredient. >:)"),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
@@ -44,48 +107,39 @@ class Menu extends StatefulWidget {
       return;
     }
     Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const Load()),
-        );
+      context,
+      MaterialPageRoute(builder: (context) => const Load()),
+    );
     try {
       final response = await client.get(
         url,
         headers: <String, String>{
           'secretAuth': secret,
-          'ingredients': ingredients,
+          'ingredients': ingredients
         },
       );
       if (response.statusCode == 200) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('RESULT'),
-              content: Text(
-                  "Result: \n" + response.body.toString()),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('OK :('),
-                ),
-              ],
-            );
-          },
+        List<dynamic> json = jsonDecode(response.body);
+        List<Recipe> recipes =
+            json.map((itemData) => Recipe.fromJson(itemData)).toList();
+        Navigator.of(context).pop();
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Result(recipes, this.username, secret)),
         );
-        //when the response is 200, we will go to the result page
       } else {
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: const Text('ALERT'),
+              title: const Text('Error'),
               content: const Text(
-                  "Something unexpected happened. We will take you back to the selection menu, SORRY!!!"),
+                  "Something unexpected happened. You will be redirected to the main page."),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
+                    Navigator.of(context).pop();
                     Navigator.of(context).pop();
                   },
                   child: const Text('OK :('),
@@ -100,9 +154,9 @@ class Menu extends StatefulWidget {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text('ERROR, THIS S**T DID NOT WORK AS  EXPECTED :('),
-            content: Text("Something went wrong. Please try again. SORRY!!!" +
-                e.toString()),
+            title: const Text('Error'),
+            content: Text(
+                "Something went wrong. Please try again. SORRY!!! ${e.toString()}"),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
@@ -132,20 +186,17 @@ class _MenuState extends State<Menu> {
         title: Text("FOOD RECOMMENDATION SYSTEM",
             style: GoogleFonts.montserrat(
                 color: Colors.white, fontWeight: FontWeight.w600)),
-        backgroundColor: Color.fromARGB(255, 171, 32, 32),
+        backgroundColor: const Color.fromARGB(255, 171, 32, 32),
         actions: <Widget>[
           Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 12.0, vertical: 14.0),
             child: ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Usuario()),
-                );
+                widget.requestUserData(context);
               },
               style: ElevatedButton.styleFrom(
-                primary: Colors.white,
+                backgroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0),
                 ),
@@ -223,24 +274,17 @@ class _MenuState extends State<Menu> {
                   child: ElevatedButton(
                     onPressed: () {
                       String ingredients = "";
-                      for(int i = 0; i < ingredientSelected.length; i++){
-                        if(ingredientSelected[i]){
-                          ingredients += getIngredientName(i) + ",";
+                      int len = 0;
+                      for (int i = 0; i < ingredientSelected.length; i++) {
+                        if (ingredientSelected[i]) {
+                          ingredients += "${getIngredientName(i)},";
+                          len++;
                         }
                       }
-                      print(ingredients); //TODO: delete this shit
-                      widget.foodRequest(ingredients, ingredientSelected.length, context);
-                      //TODO: here is the logic when pressed
-                      /*
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Load(),
-                        ),
-                      );*/
+                      widget.foodRequest(ingredients, len, context);
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Color.fromARGB(255, 208, 33, 20),
+                      backgroundColor: const Color.fromARGB(255, 208, 33, 20),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),
                       ),
@@ -320,7 +364,8 @@ class IngredientCard extends StatelessWidget {
   final bool isSelected;
   final VoidCallback onSelected;
 
-  IngredientCard({
+  const IngredientCard({
+    super.key,
     required this.ingredientName,
     required this.imageAssetPath,
     required this.isSelected,
@@ -332,11 +377,11 @@ class IngredientCard extends StatelessWidget {
     return GestureDetector(
       onTap: onSelected,
       child: Container(
-        margin: EdgeInsets.all(13),
+        margin: const EdgeInsets.all(13),
         decoration: BoxDecoration(
           color: isSelected
-              ? Color.fromARGB(255, 107, 20, 20)
-              : Color.fromARGB(255, 209, 40, 40),
+              ? const Color.fromARGB(255, 107, 20, 20)
+              : const Color.fromARGB(255, 209, 40, 40),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Column(

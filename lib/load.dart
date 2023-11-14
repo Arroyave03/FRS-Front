@@ -17,28 +17,9 @@ class Load extends StatelessWidget {
         ),
         backgroundColor: Color.fromARGB(255, 171, 32, 32),
         actions: <Widget>[
-          Padding(
+          const Padding(
             padding:
-                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 14.0),
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Usuario()),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                primary: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-              ),
-              child: Text("Hola, Usuario",
-                  style: GoogleFonts.montserrat(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  )),
-            ),
+                EdgeInsets.symmetric(horizontal: 12.0, vertical: 14.0)
           ),
           IconButton(
             icon: Image.asset(

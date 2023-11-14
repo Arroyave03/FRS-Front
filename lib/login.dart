@@ -1,5 +1,4 @@
 import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:front_is/menu.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -23,14 +22,14 @@ class Login extends StatelessWidget {
       );
       if (response.statusCode == 200) {
         Map<String, dynamic> json = jsonDecode(response.body);
-        
+
         String secretAuth = json['secretAuth'] ?? "ERROR";
-        if(secretAuth == 0){
+        if (secretAuth == "ERROR") {
           showDialog(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                title: const Text("ERROR, THIS DID'T WORK AS  EXPECTED :("),
+                title: const Text("Error"),
                 content: const Text(
                     "Could not fetch the secretAuth. Please try again."),
                 actions: <Widget>[
@@ -38,8 +37,7 @@ class Login extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: const Text(
-                        'OK'),
+                    child: const Text('OK'),
                   ),
                 ],
               );
@@ -56,16 +54,16 @@ class Login extends StatelessWidget {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: const Text('ALERT'),
+              title: const Text('Error'),
               content: const Text(
-                  "As you can see, you entered a wrong username or password. Please try again. and please don't try to hack me :)"),
+                  "Your credential are not valid. If you think this is an error, please contact an administrator or try again in a few minutes."),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
                   child: const Text(
-                      'OK, I understand, I will not try to hack you :)'),
+                      'OK'),
                 ),
               ],
             );
@@ -77,17 +75,16 @@ class Login extends StatelessWidget {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text('ERROR, THIS S**T DID NOT WORK AS  EXPECTED :('),
+            title: const Text('Error'),
             content: Text(
-                "Something went wrong. Please try again. and please don't try to hack me :)" +
-                    e.toString()),
+                "Something unexpected happened.\n  ${e.toString()}"),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
                 child: const Text(
-                    'OK, I understand, I will not try to hack you :)'),
+                    'OK'),
               ),
             ],
           );
@@ -97,8 +94,8 @@ class Login extends StatelessWidget {
   }
 
   Login({Key? key}) : super(key: key);
-  String username = "";
-  String password = "";
+  late String username;
+  late String password;
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +106,7 @@ class Login extends StatelessWidget {
           style: GoogleFonts.montserrat(
               color: Colors.white, fontWeight: FontWeight.w600),
         ),
-        backgroundColor: Color.fromARGB(255, 171, 32, 32),
+        backgroundColor: const Color.fromARGB(255, 171, 32, 32),
         actions: <Widget>[
           IconButton(
             icon: Image.asset(
@@ -142,14 +139,14 @@ class Login extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Image.asset(
                   "assets/images/perfil.png",
                   width: 150,
                   height: 150,
                 ),
-                SizedBox(height: 40),
-                Container(
+                const SizedBox(height: 40),
+                SizedBox(
                   width: 400,
                   child: TextField(
                     //when this textfield is filled, the user is extracted
@@ -164,8 +161,8 @@ class Login extends StatelessWidget {
                     onChanged: (value) => username = value,
                   ),
                 ),
-                SizedBox(height: 20),
-                Container(
+                const SizedBox(height: 20),
+                SizedBox(
                   width: 400,
                   child: TextField(
                     obscureText: true,
@@ -180,13 +177,9 @@ class Login extends StatelessWidget {
                     onChanged: (value) => password = value,
                   ),
                 ),
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
                 ElevatedButton(
                   onPressed: () {
-                    //TODO: call the authRequest function
-                    //extract user from the first textfield
-                    //extract password from the second textfield
-                    //call the authRequest function
                     authRequest(username, password, context);
 
                     /*Navigator.push(
@@ -195,11 +188,11 @@ class Login extends StatelessWidget {
                     );*/
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Color.fromARGB(255, 247, 47, 47),
+                    backgroundColor: const Color.fromARGB(255, 247, 47, 47),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20.0),
                     ),
-                    minimumSize: Size(200, 50),
+                    minimumSize: const Size(200, 50),
                   ),
                   child: Text("Login",
                       style: GoogleFonts.montserrat(

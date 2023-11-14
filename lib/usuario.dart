@@ -3,7 +3,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Usuario extends StatelessWidget {
-  const Usuario({Key? key}) : super(key: key);
+  final String user;
+  final String secret;
+  final List recipeList;
+
+  const Usuario(this.user,this.secret,this.recipeList,{Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,23 +20,10 @@ class Usuario extends StatelessWidget {
         ),
         backgroundColor: Color.fromARGB(255, 171, 32, 32),
         actions: <Widget>[
-          Padding(
+          const Padding(
             padding:
-                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 14.0),
-            child: ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                primary: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-              ),
-              child: Text("Hola, Usuario",
-                  style: GoogleFonts.montserrat(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  )),
-            ),
+                EdgeInsets.symmetric(horizontal: 12.0, vertical: 14.0),
+
           ),
           IconButton(
             icon: Image.asset(
@@ -97,13 +88,61 @@ class Usuario extends StatelessWidget {
                 ),
                 // Cuadro con margen
                 Positioned.fill(
-                  child: Container(
-                    margin: const EdgeInsets.all(40.0),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black, width: 5.0),
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
+                  child: Center(
+                    child: Padding(
+                        padding:
+                            const EdgeInsets.symmetric(horizontal: 100.0),
+                        child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(500),
+                            ),
+                            child: DataTable(
+                                columns: [
+                                  DataColumn(
+                                    label: Text(
+                                      'Name',
+                                      style: GoogleFonts.montserrat(
+                                          color: Colors.white, fontWeight: FontWeight.w600
+                                        )
+                                      )
+                                  ),
+                                  DataColumn(
+                                    label: Text(
+                                      'URL',
+                                      style: GoogleFonts.montserrat(
+                                          color: Colors.white, fontWeight: FontWeight.w600
+                                        )
+                                      )
+                                  ),
+                                ],
+                                rows: recipeList.map((item) {
+                                  return DataRow(cells: [
+                                    DataCell(
+                                      Text(
+                                        item.name, 
+                                        style: GoogleFonts.montserrat(
+                                          color: Colors.white, fontWeight: FontWeight.w600
+                                        )
+                                      ),
+                                    ),
+                                    DataCell(
+                                      Text(
+                                        item.url,
+                                        style: GoogleFonts.montserrat(
+                                          color: Colors.white, fontWeight: FontWeight.w600
+                                        )
+                                        )
+                                    ),
+                                  ]);
+                                }).toList(),
+                                headingRowColor: MaterialStateColor.resolveWith(
+                                    (states) => const Color.fromARGB(255, 107, 20, 20)),
+                                dataRowColor: MaterialStateColor.resolveWith((states) =>
+                                    const Color.fromARGB(255, 209, 40, 40))
+                            )
+                          )
+                        ),
+                  )
                 ),
               ],
             ),
